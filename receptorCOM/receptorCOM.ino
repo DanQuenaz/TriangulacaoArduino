@@ -3,6 +3,8 @@
 byte message[VW_MAX_MESSAGE_LEN];
 byte messageLength = VW_MAX_MESSAGE_LEN;
 
+unsigned long ref = 0;
+
 void setup(){
   Serial.begin(9600);
   
@@ -14,12 +16,17 @@ void setup(){
 
 void loop(){
   if(vw_get_message(message, &messageLength)){
-    Serial.println("Receveid: ");
-    for(int i=0; i<messageLength; ++i){
-      Serial.write(message[i]);
+//    Serial.println("Receveid: ");
+//    for(int i=0; i<messageLength; ++i){
+//      Serial.write(message[i]);
+//    }
+    if(message[0] == '1'){
+      ref = millis();
     }
-    Serial.write('\n');
   }
+  Serial.println(millis() - ref);
+  Serial.write('\n');
+  delay(1000);
 }
 
 
