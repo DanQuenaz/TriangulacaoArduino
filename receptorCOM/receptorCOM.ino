@@ -3,6 +3,7 @@
 byte message[VW_MAX_MESSAGE_LEN];
 byte messageLength = VW_MAX_MESSAGE_LEN;
 
+
 double dA = 23.1821;
 double aX = 38.5; // coordenada X da referência A
 double aY = 23.7; // coordenada Y da referência A
@@ -27,29 +28,37 @@ void setup(){
   vw_setup(2000);
   vw_set_rx_pin(12);
   pinMode(12, INPUT);
+  
   vw_rx_start();
 }
 
 void loop(){
-//  if(vw_get_message(message, &messageLength)){
-////    Serial.println("Receveid: ");
-////    for(int i=0; i<messageLength; ++i){
-////      Serial.write(message[i]);
-////    }
-//    if(message[0] == '1'){
-//      ref = millis();
-//    }
-//  }
-//  Serial.println(millis() - ref);
-//  Serial.write('\n');
-  double pX = 0.0;
-  double pY = 0.0;
-
-  calcPontos(pX, pY);
-  Serial.println(pX);
-  Serial.println(pY);
+  if(vw_get_message(message, &messageLength)){
+    if(message[0] == '1'){
+      ref = millis();
+      Serial.println(millis() - ref);
+    }else if(message[0] == '2' ){
+      for(int i=0; i<messageLength; ++i){
+        Serial.write(message[i]);
+      }
+      Serial.println("");
+        unsigned long aux = atoi(message+3);
+        Serial.println(millis()-ref);
+        //Serial.println(aux);
+    }
+  }
   
-  delay(1000);
+  
+//  
+//  Serial.write('\n');
+//  double pX = 0.0;
+//  double pY = 0.0;
+//
+//  calcPontos(pX, pY);
+//  Serial.println(pX);
+//  Serial.println(pY);
+  
+  
 }
 
 void calcPontos(double &pX, double &pY){ 
